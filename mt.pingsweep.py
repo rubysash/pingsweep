@@ -91,17 +91,17 @@ def pingsweep(ip):
       # it's good, put into our list
       iplist.append(all_hosts[ip])
 
-    elif "Destination host unreachable" in output.decode('utf-8'):
+    elif "reachable" in output.decode('utf-8'):
       if debug:
         print(str(all_hosts[ip]), '\033[90m'+"is Offline (Unreachable)")
       pass
 
-    elif "Request timed out" in output.decode('utf-8'):
+    elif "timed" in output.decode('utf-8'):
       if debug:
         print(str(all_hosts[ip]), '\033[90m'+"is Offline (Timeout)")
       pass
 
-    elif "transmit failed" in output.decode('utf-8'):
+    elif "failed" in output.decode('utf-8'):
       if debug:
         print(str(all_hosts[ip]), '\033[90m'+"is Offline (Transmit Failed)")
       pass
