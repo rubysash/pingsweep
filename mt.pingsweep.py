@@ -71,7 +71,6 @@ def pingsweep(ip):
   else:
     print("Cannot determine OS type")
     sys.exit()
-
     
   # lock this section, until we get a complete chunk
   # then free it (so it doesn't write all over itself)
@@ -81,7 +80,11 @@ def pingsweep(ip):
       print('\033[93m', end='')
     
     # code logic if we have/don't have good response
-    if "Reply" in output.decode('utf-8'):
+
+    # used casefold for case insenstive search
+    # Win: Reply from 8.8.8.8: bytes=32 time=19ms TTL=53
+    # Nix: 64 bytes from 8.8.8.8: icmp_seq=4 ttl=53 time=22.003 ms
+    if 'ttl'.casefold() in output.decode('utf-8').casefold():
       if debug:
         print(str(all_hosts[ip]), '\033[32m'+"is Online")
          
@@ -96,6 +99,11 @@ def pingsweep(ip):
     elif "Request timed out" in output.decode('utf-8'):
       if debug:
         print(str(all_hosts[ip]), '\033[90m'+"is Offline (Timeout)")
+      pass
+
+    elif "transmit failed" in output.decode('utf-8'):
+      if debug:
+        print(str(all_hosts[ip]), '\033[90m'+"is Offline (Transmit Failed)")
       pass
 
     else:
